@@ -228,27 +228,77 @@ function createRandomNumber(min, max) {
 		}, 3000)
 	})
 }
+function createRandomNumber2(min, max) {
+	return new Promise(function (resolve, reject) {
+		// passing 1 as min is not allowed 
+		if (min === 1) {
+			reject(new Error('invalid argument'))
+		}
+		setTimeout(function () {
+			resolve(Math.floor(Math.random() * (max - min + 1) + min))
+		}, 3000)
+	})
+}
 // const res = createRandomNumber()
 // console.log(res)
 
 // how to handle a function that returns a promise 
 // 1. using .then()
-createRandomNumber(3, 10)
-	.then(function (randomNumber) {
-		// this get's executed when we have 
-		// a successful result
-		console.log(randomNumber)
-	})
-	.then(function () {
-		// here you can chain another .then()
-		// bc .then() always returns a promise 
-		// itself
-		console.log('hello')
-	})
-	.catch(function (error) {
-		// this get's executed if we have an error
+// createRandomNumber(3, 10)
+// 	.then(function (randomNumber) {
+// 		// this get's executed when we have 
+// 		// a successful result
+// 		console.log(randomNumber)
+// 	})
+// 	.then(function () {
+// 		// here you can chain another .then()
+// 		// bc .then() always returns a promise 
+// 		// itself
+// 		console.log('hello')
+// 	})
+// 	.catch(function (error) {
+// 		// this get's executed if we have an error
+// 		console.log(error)
+// 	})
+// 	.finally(function () {
+// 		console.log('this always executes')
+// 	})
+
+
+// 2. using async await 
+// IIFE immediately invoked function expression
+// (async function () {
+// 	const result2 = await createRandomNumber(3, 10)
+// 	console.log(result2)
+// })()
+
+async function run() {
+	// try catch
+	try {
+		const result2 = await createRandomNumber(3, 10)
+		console.log(result2)
+	} catch (error) {
 		console.log(error)
-	})
-	.finally(function () {
+	} finally {
 		console.log('this always executes')
+	}
+}
+// run()
+
+// If we want to call multiple async functions and wait 
+// until all them are resolved we can use Promise.all()
+
+Promise.all([
+	createRandomNumber(1, 6),
+	createRandomNumber2(7, 10)
+])
+	// result here will be an array with the resolved
+	// values from all the async function calls that we
+	// passed as arguments
+	.then(function (result) {
+		console.log(result)
 	})
+	.catch(function (err) {
+		console.log(err)
+	})
+
